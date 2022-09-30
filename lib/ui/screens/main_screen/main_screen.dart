@@ -77,22 +77,33 @@ class _MainScreenState extends State<MainScreen> {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: PageView(
-                          controller: _pageController,
-                          onPageChanged: (index) {
-                            BlocProvider.of<UserBloc>(context)
-                                .add(UserReloaded());
-                            setState(() {
-                              _pageIndex = index;
-                            });
+                        child: BlocListener<GlobalBloc, GlobalState>(
+                          listener: (context, state) {
+                            if (state is GlobalGoToProfilePage) {
+                              _pageController.animateToPage(
+                                2,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.ease,
+                              );
+                            }
                           },
-                          children: [
-                            HomePage(),
-                            CartPage(),
-                            ProfilePage(
-                              userBloc: BlocProvider.of<UserBloc>(context),
-                            ),
-                          ],
+                          child: PageView(
+                            controller: _pageController,
+                            onPageChanged: (index) {
+                              BlocProvider.of<UserBloc>(context)
+                                  .add(UserReloaded());
+                              setState(() {
+                                _pageIndex = index;
+                              });
+                            },
+                            children: [
+                              HomePage(),
+                              CartPage(),
+                              ProfilePage(
+                                userBloc: BlocProvider.of<UserBloc>(context),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Positioned(

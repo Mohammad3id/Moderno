@@ -47,7 +47,6 @@ class CartItemTileQuantityController extends StatelessWidget {
                   if (cartItem.quantity > 1) {
                     BlocProvider.of<CartBloc>(
                       context,
-                      listen: false,
                     ).add(CartItemQuantityDecreased(cartItem.id));
                   } else {
                     showDialog<bool>(

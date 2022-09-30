@@ -64,7 +64,7 @@ class UserRepository {
     required String? additionalAddressDetails,
     required String phoneNumber,
   }) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException(
           "Can't add shipping address to a guest user.");
     }
@@ -97,7 +97,7 @@ class UserRepository {
     required String? additionalAddressDetails,
     required String phoneNumber,
   }) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException(
           "Can't update shipping address from a guest user.");
     }
@@ -123,7 +123,7 @@ class UserRepository {
 
   Future<User> removeShippingAddressFromCurrentUser(
       String shippingAddressId) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException(
         "Can't remove shipping address from a guest user.",
       );
@@ -148,7 +148,7 @@ class UserRepository {
     required int expiryMonth,
     required int expiryYear,
   }) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException(
           "Can't add payment method to a guest user.");
     }
@@ -170,7 +170,7 @@ class UserRepository {
   }
 
   Future<User> removePaymentMethodFromCurrentUser(String cardNumber) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException(
         "Can't remove payment method from a guest user.",
       );
@@ -196,7 +196,7 @@ class UserRepository {
     String? oldPassword,
     String? password,
   }) async {
-    if (!await isUserSignedIn()) {
+    if (!await isUserLogedIn()) {
       throw UserRepositoryException("Can't update data of a guest user.");
     }
     try {
@@ -217,7 +217,7 @@ class UserRepository {
     }
   }
 
-  Future<bool> isUserSignedIn() async {
+  Future<bool> isUserLogedIn() async {
     return _currentUser.id != "";
   }
 

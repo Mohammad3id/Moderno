@@ -28,9 +28,7 @@ class CartProvider {
         : await _productProvider.getProductById(productId);
     databaseUser.cart.items.add(
       CartItem(
-        id: databaseUser.cart.items.isEmpty
-            ? "0"
-            : int.parse(databaseUser.cart.items.last.id).toString(),
+        id: Uuid().v4(),
         product: product,
         quantity: quantity,
         productAttributes: productAttributes,
@@ -89,7 +87,7 @@ class CartProvider {
       }
 
       int minDeliveryDays = 0;
-      int maxDeliveryDays = double.infinity.toInt();
+      int maxDeliveryDays = 0;
 
       for (final deliveryDays in databaseUser.cart.items
           .map((item) => item.product.expectedDeliveryTime)) {
@@ -101,7 +99,8 @@ class CartProvider {
         }
       }
 
-      databaseUser.orders.add(
+      databaseUser.orders.insert(
+        0,
         Order(
           id: const Uuid().v4(),
           orderDate: DateTime.now(),

@@ -14,6 +14,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartItemQuantityDecreased>(_onCartItemQuantityDecreased);
     on<CartProductAdded>(_onCartProductAdded);
     on<CartItemRemoved>(_onCartItemRemoved);
+    on<CartOrderPlaced>(_onCartOrderPlaced);
     add(CartInitialized());
   }
 
@@ -89,6 +90,32 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     _emitCartInteractionSucess(emit);
   }
 
+  FutureOr<void> _onCartOrderPlaced(
+    CartOrderPlaced event,
+    Emitter<CartState> emit,
+  ) async {
+    emit(CartOrderPlacingInProgress(
+      cartItems: _cartRepository.currentCart.items,
+      total: _cartRepository.currentCart.total,
+      totalBeforeDiscount: _cartRepository.currentCart.totalBeforeDiscount,
+    ));
+    try {
+      final newCart = await _cartRepository.placeOrder();
+      emit(CartOrderPlacingSuccess(
+        cartItems: newCart.items,
+        total: newCart.total,
+        totalBeforeDiscount: newCart.totalBeforeDiscount,
+      ));
+    } on CartRepositoryException catch (e) {
+      emit(CartOrderPlacingFail(
+        e.message,
+        cartItems: _cartRepository.currentCart.items,
+        total: _cartRepository.currentCart.total,
+        totalBeforeDiscount: _cartRepository.currentCart.totalBeforeDiscount,
+      ));
+    }
+  }
+
   void _tryEmitCartState(Emitter<CartState> emit) {
     try {
       emit(CartLoadSuccess(
@@ -156,6 +183,8 @@ class CartItemRemoved extends CartEvent {
   CartItemRemoved(this.cartItemId);
 }
 
+class CartOrderPlaced extends CartEvent {}
+
 // States
 abstract class CartState {}
 
@@ -194,6 +223,32 @@ class CartInteractionFail extends CartLoadSuccess {
 
 class CartInteractionSucess extends CartLoadSuccess {
   CartInteractionSucess({
+    required super.cartItems,
+    required super.total,
+    super.totalBeforeDiscount,
+  });
+}
+
+class CartOrderPlacingInProgress extends CartLoadSuccess {
+  CartOrderPlacingInProgress({
+    required super.cartItems,
+    required super.total,
+    super.totalBeforeDiscount,
+  });
+}
+
+class CartOrderPlacingSuccess extends CartLoadSuccess {
+  CartOrderPlacingSuccess({
+    required super.cartItems,
+    required super.total,
+    super.totalBeforeDiscount,
+  });
+}
+
+class CartOrderPlacingFail extends CartLoadSuccess {
+  final String errorMessage;
+  CartOrderPlacingFail(
+    this.errorMessage, {
     required super.cartItems,
     required super.total,
     super.totalBeforeDiscount,

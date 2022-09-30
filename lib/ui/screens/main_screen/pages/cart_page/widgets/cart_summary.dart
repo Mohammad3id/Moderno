@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moderno/bloc/cart_bloc.dart';
+import 'package:moderno/bloc/global_bloc.dart';
+import 'package:moderno/data/repositories/user_repository.dart';
 import 'package:moderno/shared_functionality/format_price.dart';
+import 'package:moderno/ui/shared_widgets/confirmation_dialog.dart';
 
 class CartSummary extends StatelessWidget {
   const CartSummary({
@@ -79,17 +82,74 @@ class CartSummary extends StatelessWidget {
                             ),
                         ],
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Theme.of(context).primaryColor,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 20,
-                          ),
-                        ),
-                        child: const Text("Checkout"),
+                      RepositoryProvider.value(
+                        value: UserRepository.instance,
+                        child: Builder(builder: (context) {
+                          return TextButton(
+                            onPressed: () async {
+                              RepositoryProvider.of<UserRepository>(
+                                context,
+                              ).isUserLogedIn().then(
+                                (isLogednIn) {
+                                  if (isLogednIn) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const ConfirmationDialog(
+                                          message: "Place order?",
+                                          confirmButtonText: "Confirm",
+                                          denyButtonText: "Cancel",
+                                        );
+                                      },
+                                    ).then(
+                                      (confirmed) {
+                                        if (confirmed) {
+                                          BlocProvider.of<CartBloc>(context)
+                                              .add(
+                                            CartOrderPlaced(),
+                                          );
+                                          BlocProvider.of<GlobalBloc>(context)
+                                              .add(
+                                            GlobalRequestGoToProfilePage(),
+                                          );
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const ConfirmationDialog(
+                                          message: "Log in to place your order",
+                                          confirmButtonText: "Log in",
+                                          denyButtonText: "Cancel",
+                                        );
+                                      },
+                                    ).then(
+                                      (confirmed) {
+                                        if (confirmed) {
+                                          BlocProvider.of<GlobalBloc>(context)
+                                              .add(
+                                            GlobalRequestGoToProfilePage(),
+                                          );
+                                        }
+                                      },
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 20,
+                              ),
+                            ),
+                            child: const Text("Checkout"),
+                          );
+                        }),
                       )
                     ],
                   ),

@@ -6,6 +6,8 @@ import 'package:moderno/shared_functionality/curves_with_delay.dart';
 import 'package:moderno/shared_functionality/format_price.dart';
 import 'package:moderno/ui/screens/main_screen/pages/cart_page/widgets/cart_item_tile.dart';
 
+import 'widgets/cart_summary.dart';
+
 class CartPage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   CartPage({super.key});
@@ -110,11 +112,7 @@ class _CartPageState extends State<CartPage> {
                     ),
                   ),
                 ),
-                CartSummary(
-                  showDivider: _showDivider,
-                  total: state.total,
-                  totalBeforeDiscount: state.totalBeforeDiscount,
-                ),
+                CartSummary(showDivider: _showDivider),
                 KeyboardVisibilityBuilder(
                     builder: (context, isKeyboardVisible) {
                   return AnimatedContainer(
@@ -133,102 +131,6 @@ class _CartPageState extends State<CartPage> {
             );
           }
         },
-      ),
-    );
-  }
-}
-
-class CartSummary extends StatelessWidget {
-  final int total;
-  final int? totalBeforeDiscount;
-
-  const CartSummary({
-    Key? key,
-    required bool showDivider,
-    required this.total,
-    this.totalBeforeDiscount,
-  })  : _showDivider = showDivider,
-        super(key: key);
-
-  final bool _showDivider;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 80.5,
-      child: Stack(
-        children: [
-          AnimatedOpacity(
-            curve: Curves.ease,
-            duration: const Duration(milliseconds: 200),
-            opacity: _showDivider ? 1 : 0,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15),
-              height: 0.5,
-              decoration: const BoxDecoration(
-                color: Colors.black54,
-                boxShadow: [
-                  BoxShadow(offset: Offset(0, -1), blurRadius: 5),
-                ],
-              ),
-            ),
-          ),
-          Positioned.fill(
-            top: 0.5,
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-                horizontal: 30,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "Total",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 10,
-                        ),
-                      ),
-                      Text(
-                        "${formatPrice(total)} EGP",
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      if (totalBeforeDiscount != null)
-                        Text(
-                          "${formatPrice(totalBeforeDiscount!)} EGP",
-                          style: const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            fontSize: 12,
-                          ),
-                        ),
-                    ],
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 20,
-                      ),
-                    ),
-                    child: const Text("Checkout"),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

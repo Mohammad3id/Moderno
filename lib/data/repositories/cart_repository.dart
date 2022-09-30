@@ -19,7 +19,7 @@ class CartRepository {
   final _productRepository = ProductRepository.instance;
 
   Future<Cart> loadCart() async {
-    if (await _userRepositoy.isUserSignedIn()) {
+    if (await _userRepositoy.isUserLogedIn()) {
       _currentCart =
           await _cartProvider.getUserCart(_userRepositoy.currentUser.id);
     }
@@ -56,7 +56,7 @@ class CartRepository {
       );
       return _currentCart;
     } catch (_) {
-      if (!await _userRepositoy.isUserSignedIn()) {
+      if (!await _userRepositoy.isUserLogedIn()) {
         _currentCart.items.add(
           CartItem(
             id: const Uuid().v4(),
@@ -87,7 +87,7 @@ class CartRepository {
   }
 
   Future<Cart> placeOrder() async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       throw UserRepositoryException("Can't place an order as a guest");
     }
     try {
@@ -99,7 +99,7 @@ class CartRepository {
   }
 
   Future<Cart> increaseCartItemQuantitiy(String cartItemId) async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       try {
         _currentCart.items
             .firstWhere((item) => cartItemId == item.id)
@@ -120,7 +120,7 @@ class CartRepository {
   }
 
   Future<Cart> decreaseCartItemQuantitiy(String cartItemId) async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       try {
         final cartItem =
             _currentCart.items.firstWhere((item) => item.id == cartItemId);

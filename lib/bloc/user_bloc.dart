@@ -31,7 +31,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserInitialized event,
     Emitter<UserState> emit,
   ) async {
-    if (await _userRepository.isUserSignedIn()) {
+    if (await _userRepository.isUserLogedIn()) {
       _wishlistRepository.loadWishlist();
       _cartRepository.loadCart();
       emit(
@@ -96,6 +96,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             item.product.id,
             quantity: item.quantity,
             productAttributes: item.productAttributes,
+            isBundle: item.product is Bundle,
           );
         }
       }

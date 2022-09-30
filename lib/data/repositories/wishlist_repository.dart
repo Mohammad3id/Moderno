@@ -19,7 +19,7 @@ class WishlistRepository {
   final _productRepository = ProductRepository.instance;
 
   Future<List<Product>> loadWishlist() async {
-    if (await _userRepositoy.isUserSignedIn()) {
+    if (await _userRepositoy.isUserLogedIn()) {
       _currentWishlist = await _wishlistProvider
           .getUserWishlist(_userRepositoy.currentUser.id);
     }
@@ -35,7 +35,7 @@ class WishlistRepository {
     required String productId,
     isBundle = false,
   }) async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       try {
         final product = isBundle
             ? await _productRepository.getBundleById(productId)
@@ -63,7 +63,7 @@ class WishlistRepository {
     required String productId,
     bool isBundle = false,
   }) async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       _currentWishlist.removeWhere((product) => product.id == productId);
       return _currentWishlist;
     } else {
@@ -83,7 +83,7 @@ class WishlistRepository {
   Future<bool> isProductWishlisted(
     String productId,
   ) async {
-    if (!await _userRepositoy.isUserSignedIn()) {
+    if (!await _userRepositoy.isUserLogedIn()) {
       return _currentWishlist.any((product) => product.id == productId);
     } else {
       try {
