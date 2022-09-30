@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:moderno/shared_functionality/fade_in_page_route.dart';
+import 'package:moderno/ui/screens/search_screen/search_screen.dart';
 
 class TopBar extends StatefulWidget {
+  final String? currentText;
+  final bool isInSearchPage;
   const TopBar({
     Key? key,
+    this.currentText,
+    this.isInSearchPage = false,
   }) : super(key: key);
 
   @override
@@ -11,6 +17,13 @@ class TopBar extends StatefulWidget {
 
 class _TopBarState extends State<TopBar> {
   final _focusNode = FocusNode();
+  late final TextEditingController _searchBarController;
+
+  @override
+  void initState() {
+    _searchBarController = TextEditingController(text: widget.currentText);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -55,11 +68,29 @@ class _TopBarState extends State<TopBar> {
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: _searchBarController,
                           focusNode: _focusNode,
                           cursorColor: Colors.white,
                           style: const TextStyle(
                             color: Colors.white,
                           ),
+                          onSubmitted: (searchText) {
+                            if (searchText.trim().isEmpty) return;
+
+                            if (widget.isInSearchPage) {
+                              Navigator.of(context).pushReplacement(
+                                FadeInPageRoute(
+                                  SearchScreen(searchText: searchText.trim()),
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).push(
+                                FadeInPageRoute(
+                                  SearchScreen(searchText: searchText.trim()),
+                                ),
+                              );
+                            }
+                          },
                           decoration: const InputDecoration(
                             isDense: true,
                             hintText: "Search Moderno",

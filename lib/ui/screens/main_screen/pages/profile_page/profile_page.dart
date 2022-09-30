@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moderno/bloc/user_bloc.dart';
 import 'package:moderno/data/models/order.dart';
+import 'package:moderno/shared_functionality/fade_in_page_route.dart';
 import 'package:moderno/ui/screens/main_screen/pages/profile_page/widgets/orders_cards_list.dart';
 import 'package:moderno/ui/screens/user_settings_screen/user_settings_screen.dart';
 import 'package:moderno/ui/shared_widgets/products_crads_list.dart';
@@ -79,9 +80,8 @@ class ProfilePage extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    UserSettingsScreen(userBloc: userBloc),
+                              FadeInPageRoute(
+                                UserSettingsScreen(userBloc: userBloc),
                               ),
                             );
                           },

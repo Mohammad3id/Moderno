@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moderno/shared_functionality/fade_in_page_route.dart';
 import 'package:moderno/ui/screens/main_screen/main_screen.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
@@ -59,8 +60,8 @@ class AppBottomNavigationBar extends StatelessWidget {
             Navigator.of(context).popUntil((route) => route.isFirst);
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                builder: (context) => MainScreen.withInitialPageIndex(index),
+              FadeInPageRoute(
+                MainScreen.withInitialPageIndex(index),
               ),
             );
           }

@@ -18,13 +18,14 @@ class ProductRepository {
   Future<List<Product>> getDeals() async {
     return await _productProvider.getProductsRandomly(
       count: 7,
-      condition: (product) => product.priceBeforeDiscount != null,
+      condition: (product) =>
+          product.priceBeforeDiscount != null && product is! Bundle,
     );
   }
 
   Future<Map<ProductCategory, List<Product>>> getFeaturedProducts() async {
     Map<ProductCategory, List<Product>> featuredProducts = {};
-    final categories = ProductCategory.values.toList();
+    final categories = ProductCategory.values.toList()..removeLast();
     categories.shuffle();
     for (final category in categories) {
       final products = await _productProvider.getProductsRandomly(
@@ -43,7 +44,7 @@ class ProductRepository {
 
   Future<List<Product>> searchProducts(
     String search, {
-    int pageSize = 10,
+    int pageSize = 3,
     String? startSearchingFromProductId,
     bool Function(Product)? condition,
     ProductSort? sort,
