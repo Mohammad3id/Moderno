@@ -52,6 +52,91 @@ class UserProvider {
     return newUser;
   }
 
+  Future<DatabaseUser> addShippingAddressToDBUser(
+    String userId, {
+    required String name,
+    required String country,
+    required String governate,
+    required String city,
+    required String street,
+    required String? additionalAddressDetails,
+    required String phoneNumber,
+  }) async {
+    final databaseUser = await getUserById(userId);
+
+    try {
+      databaseUser.shippingAdresses.add(
+        UserShippingAddress(
+          id: Uuid().v4(),
+          name: name,
+          country: country,
+          governate: governate,
+          city: city,
+          street: street,
+          additionalAddressDetails: additionalAddressDetails,
+          phoneNumber: phoneNumber,
+        ),
+      );
+      return databaseUser;
+    } on UserException catch (e) {
+      throw UserDatabaseException(
+          "Invalid shipping address details: ${e.message}");
+    }
+  }
+
+  Future<DatabaseUser> updateShippingAddressFromDBUser(
+    String userId, {
+    required String shippingAddressId,
+    required String name,
+    required String country,
+    required String governate,
+    required String city,
+    required String street,
+    required String? additionalAddressDetails,
+    required String phoneNumber,
+  }) async {
+    final databaseUser = await getUserById(userId);
+
+    if (!databaseUser.shippingAdresses
+        .any((address) => address.id == shippingAddressId)) {
+      throw UserDatabaseException(
+          "No shipping address with id $shippingAddressId found with user");
+    }
+
+    try {
+      final shippingAddress = databaseUser.shippingAdresses
+          .firstWhere((address) => address.id == shippingAddressId);
+      final updatedShippingAddress = UserShippingAddress(
+        id: shippingAddress.id,
+        country: country,
+        governate: governate,
+        city: city,
+        street: street,
+        additionalAddressDetails: additionalAddressDetails,
+        name: name,
+        phoneNumber: phoneNumber,
+      );
+      databaseUser.shippingAdresses[databaseUser.shippingAdresses
+              .indexWhere((address) => address.id == shippingAddressId)] =
+          updatedShippingAddress;
+      return databaseUser;
+    } on UserException catch (e) {
+      throw UserDatabaseException(
+          "Invalid shipping address details: ${e.message}");
+    }
+  }
+
+  Future<DatabaseUser> removeShippingAddressFromCurrentUser(
+    String userId, {
+    required String shippingAddressId,
+  }) async {
+    final databaseUser = await getUserById(userId);
+    databaseUser.shippingAdresses.removeWhere(
+      (address) => address.id == shippingAddressId,
+    );
+    return databaseUser;
+  }
+
   Future<DatabaseUser> addPaymentMethodToDBUser(
     String userId, {
     required String cardHolderName,
@@ -211,10 +296,11 @@ List<DatabaseUser> usersDatabase = [
     email: "eid115599@gmail.com",
     shippingAdresses: [
       UserShippingAddress(
+        id: const Uuid().v4(),
         name: "Mohammad Mossad Eid",
-        phoneNumber: "01028540384",
+        phoneNumber: "+201028540384",
         country: "Egypt",
-        state: "Damietta",
+        governate: "Damietta",
         city: "Dumyat City",
         street: "Elharby St.",
         additionalAddressDetails: "Near Alzaharaa Mosque",

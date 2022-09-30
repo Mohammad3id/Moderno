@@ -33,17 +33,19 @@ class User {
 }
 
 class UserShippingAddress {
+  final String id;
   final String name;
   final String country;
-  final String state;
+  final String governate;
   final String city;
   final String street;
-  final String additionalAddressDetails;
+  final String? additionalAddressDetails;
   final String phoneNumber;
 
   UserShippingAddress({
+    required this.id,
     required this.country,
-    required this.state,
+    required this.governate,
     required this.city,
     required this.street,
     required this.additionalAddressDetails,

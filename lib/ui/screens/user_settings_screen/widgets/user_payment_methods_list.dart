@@ -91,7 +91,7 @@ class UserPaymentMethodsList extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) => const ConfirmationDialog(
-                                message: "Delete payment method?",
+                                message: "Delete Payment Method?",
                                 confirmButtonText: "Delete",
                                 denyButtonText: "Cancel",
                               ),

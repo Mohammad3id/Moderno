@@ -21,6 +21,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserReloaded>(_onUserReloaded);
     on<UserPaymentMethodAdded>(_onUserPaymentMethodAdded);
     on<UserPaymentMethodRemoved>(_onUserPaymentMethodRemoved);
+    on<UserShippingAddressAdded>(_onUserShippingAddressAdded);
+    on<UserShippingAddressUpdated>(_onUserShippingAddressUpdated);
+    on<UserShippingAddressRemoved>(_onUserShippingAddressRemoved);
     add(UserInitialized());
   }
 
@@ -235,6 +238,101 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       );
     }
   }
+
+  FutureOr<void> _onUserShippingAddressAdded(
+      UserShippingAddressAdded event, Emitter<UserState> emit) async {
+    try {
+      final user = await _userRepository.addShippingAddressToCurrentUser(
+        name: event.name,
+        country: event.country,
+        governate: event.governate,
+        city: event.city,
+        street: event.street,
+        additionalAddressDetails: event.additionalAddressDetails,
+        phoneNumber: event.phoneNumber,
+      );
+
+      emit(
+        UserUpdateSuccess(
+          userInfo: user,
+          wishlist:
+              _createProductsBriefsList(_wishlistRepository.currentWishlist),
+        ),
+      );
+    } on UserRepositoryException catch (e) {
+      emit(
+        UserUpdateFailed(
+          errorMessage: e.message,
+          userInfo: _userRepository.currentUser,
+          wishlist: _createProductsBriefsList(
+            _wishlistRepository.currentWishlist,
+          ),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onUserShippingAddressUpdated(
+    UserShippingAddressUpdated event,
+    Emitter<UserState> emit,
+  ) async {
+    try {
+      final user = await _userRepository.updateShippingAddressFromCurrentUser(
+        shippingAddressId: event.id,
+        name: event.name,
+        country: event.country,
+        governate: event.governate,
+        city: event.city,
+        street: event.street,
+        additionalAddressDetails: event.additionalAddressDetails,
+        phoneNumber: event.phoneNumber,
+      );
+
+      emit(
+        UserUpdateSuccess(
+          userInfo: user,
+          wishlist:
+              _createProductsBriefsList(_wishlistRepository.currentWishlist),
+        ),
+      );
+    } on UserRepositoryException catch (e) {
+      emit(
+        UserUpdateFailed(
+          errorMessage: e.message,
+          userInfo: _userRepository.currentUser,
+          wishlist: _createProductsBriefsList(
+            _wishlistRepository.currentWishlist,
+          ),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onUserShippingAddressRemoved(
+      UserShippingAddressRemoved event, Emitter<UserState> emit) async {
+    try {
+      final user =
+          await _userRepository.removeShippingAddressFromCurrentUser(event.id);
+      emit(
+        UserUpdateSuccess(
+          userInfo: user,
+          wishlist: _createProductsBriefsList(
+            _wishlistRepository.currentWishlist,
+          ),
+        ),
+      );
+    } catch (e) {
+      emit(
+        UserUpdateFailed(
+          errorMessage: "Unknown error occured $e",
+          userInfo: _userRepository.currentUser,
+          wishlist: _createProductsBriefsList(
+            _wishlistRepository.currentWishlist,
+          ),
+        ),
+      );
+    }
+  }
 }
 
 // Events
@@ -243,10 +341,10 @@ abstract class UserEvent {}
 class UserInitialized extends UserEvent {}
 
 class UserCreated extends UserEvent {
-  String firstName;
-  String lastName;
-  String email;
-  String password;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String password;
 
   UserCreated({
     required this.firstName,
@@ -257,8 +355,8 @@ class UserCreated extends UserEvent {
 }
 
 class UserLogedIn extends UserEvent {
-  String email;
-  String password;
+  final String email;
+  final String password;
 
   UserLogedIn({
     required this.email,
@@ -269,12 +367,12 @@ class UserLogedIn extends UserEvent {
 class UserLogedOut extends UserEvent {}
 
 class UserInfoChanged extends UserEvent {
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? phoneNumber;
-  String? oldPassword;
-  String? password;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? phoneNumber;
+  final String? oldPassword;
+  final String? password;
 
   UserInfoChanged({
     this.firstName,
@@ -287,11 +385,11 @@ class UserInfoChanged extends UserEvent {
 }
 
 class UserPaymentMethodAdded extends UserEvent {
-  String cardHolderName;
-  String cardNumber;
-  String cardCVV;
-  int expiryMonth;
-  int expiryYear;
+  final String cardHolderName;
+  final String cardNumber;
+  final String cardCVV;
+  final int expiryMonth;
+  final int expiryYear;
   UserPaymentMethodAdded({
     required this.cardHolderName,
     required this.cardNumber,
@@ -302,9 +400,59 @@ class UserPaymentMethodAdded extends UserEvent {
 }
 
 class UserPaymentMethodRemoved extends UserEvent {
-  String cardNumber;
+  final String cardNumber;
   UserPaymentMethodRemoved(
     this.cardNumber,
+  );
+}
+
+class UserShippingAddressAdded extends UserEvent {
+  final String name;
+  final String country;
+  final String governate;
+  final String city;
+  final String street;
+  final String? additionalAddressDetails;
+  final String phoneNumber;
+
+  UserShippingAddressAdded({
+    required this.country,
+    required this.governate,
+    required this.city,
+    required this.street,
+    required this.additionalAddressDetails,
+    required this.name,
+    required this.phoneNumber,
+  });
+}
+
+class UserShippingAddressUpdated extends UserEvent {
+  final String id;
+  final String name;
+  final String country;
+  final String governate;
+  final String city;
+  final String street;
+  final String? additionalAddressDetails;
+  final String phoneNumber;
+
+  UserShippingAddressUpdated({
+    required this.id,
+    required this.country,
+    required this.governate,
+    required this.city,
+    required this.street,
+    required this.additionalAddressDetails,
+    required this.name,
+    required this.phoneNumber,
+  });
+}
+
+class UserShippingAddressRemoved extends UserEvent {
+  final String id;
+
+  UserShippingAddressRemoved(
+    this.id,
   );
 }
 

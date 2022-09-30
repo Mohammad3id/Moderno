@@ -57,7 +57,8 @@ class UserPaymentMethodAddDialog extends StatelessWidget {
                         Size(
                           double.infinity,
                           (MediaQuery.of(context).size.height -
-                              MediaQuery.of(context).viewInsets.bottom),
+                              MediaQuery.of(context).viewInsets.bottom -
+                              150),
                         ),
                       ),
                       child: SingleChildScrollView(

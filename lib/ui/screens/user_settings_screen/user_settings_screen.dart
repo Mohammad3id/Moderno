@@ -5,7 +5,7 @@ import 'package:moderno/bloc/user_bloc.dart';
 import 'widgets/user_payment_methods_list.dart';
 import 'widgets/user_settings_fields.dart';
 import 'widgets/user_settings_top_bar.dart';
-import 'widgets/user_shipping_adresses.dart';
+import 'widgets/user_shipping_adrdesses_list.dart';
 
 class UserSettingsScreen extends StatefulWidget {
   final UserBloc userBloc;
@@ -58,7 +58,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                             const UserSettingsFields(),
                             UserPaymentMethodsList(userBloc: widget.userBloc),
                             const SizedBox(height: 20),
-                            const UserShippingAddresses(),
+                            UserShippingAddresses(userBloc: widget.userBloc),
                             const SizedBox(height: 20),
                           ],
                         ),

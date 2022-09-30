@@ -55,6 +55,92 @@ class UserRepository {
     }
   }
 
+  Future<User> addShippingAddressToCurrentUser({
+    required String name,
+    required String country,
+    required String governate,
+    required String city,
+    required String street,
+    required String? additionalAddressDetails,
+    required String phoneNumber,
+  }) async {
+    if (!await isUserSignedIn()) {
+      throw UserRepositoryException(
+          "Can't add shipping address to a guest user.");
+    }
+    try {
+      _currentUser = _buildUserFromDBUser(
+        await _userProvider.addShippingAddressToDBUser(
+          _currentUser.id,
+          name: name,
+          country: country,
+          governate: governate,
+          city: city,
+          street: street,
+          additionalAddressDetails: additionalAddressDetails,
+          phoneNumber: phoneNumber,
+        ),
+      );
+      return _currentUser;
+    } on UserDatabaseException catch (e) {
+      throw UserRepositoryException(e.message);
+    }
+  }
+
+  Future<User> updateShippingAddressFromCurrentUser({
+    required String shippingAddressId,
+    required String name,
+    required String country,
+    required String governate,
+    required String city,
+    required String street,
+    required String? additionalAddressDetails,
+    required String phoneNumber,
+  }) async {
+    if (!await isUserSignedIn()) {
+      throw UserRepositoryException(
+          "Can't update shipping address from a guest user.");
+    }
+    try {
+      _currentUser = _buildUserFromDBUser(
+        await _userProvider.updateShippingAddressFromDBUser(
+          _currentUser.id,
+          shippingAddressId: shippingAddressId,
+          name: name,
+          country: country,
+          governate: governate,
+          city: city,
+          street: street,
+          additionalAddressDetails: additionalAddressDetails,
+          phoneNumber: phoneNumber,
+        ),
+      );
+      return _currentUser;
+    } on UserDatabaseException catch (e) {
+      throw UserRepositoryException(e.message);
+    }
+  }
+
+  Future<User> removeShippingAddressFromCurrentUser(
+      String shippingAddressId) async {
+    if (!await isUserSignedIn()) {
+      throw UserRepositoryException(
+        "Can't remove shipping address from a guest user.",
+      );
+    }
+    try {
+      _currentUser = _buildUserFromDBUser(
+        await _userProvider.removeShippingAddressFromCurrentUser(
+          _currentUser.id,
+          shippingAddressId: shippingAddressId,
+        ),
+      );
+      return _currentUser;
+    } on UserDatabaseException catch (e) {
+      throw UserRepositoryException(e.message);
+    }
+  }
+
   Future<User> addPaymentMethodToCurrentUser({
     required String cardHolderName,
     required String cardNumber,
@@ -83,7 +169,7 @@ class UserRepository {
     }
   }
 
-  Future<User> removePaymentMethodFromCurrentUser(cardNumber) async {
+  Future<User> removePaymentMethodFromCurrentUser(String cardNumber) async {
     if (!await isUserSignedIn()) {
       throw UserRepositoryException(
         "Can't remove payment method from a guest user.",

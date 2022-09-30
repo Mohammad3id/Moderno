@@ -85,7 +85,8 @@ class _UserSettingsFieldEditDialogState
                     Size(
                         double.infinity,
                         (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).viewInsets.bottom)),
+                                MediaQuery.of(context).viewInsets.bottom) -
+                            150),
                   ),
                   child: SingleChildScrollView(
                     child: Column(
@@ -110,14 +111,10 @@ class _UserSettingsFieldEditDialogState
                                   decoration: InputDecoration(
                                     hintText: widget.isPassword
                                         ? "Old Password"
-                                        : widget.isPhoneNumber
-                                            ? "+01#########"
-                                            : "${widget.initialValue != null ? "Edit" : "Add"} ${widget.label}",
+                                        : "${widget.initialValue != null ? "Edit" : "Add"} ${widget.label}",
                                     labelText: widget.isPassword
                                         ? "Old Password"
-                                        : widget.isPhoneNumber
-                                            ? "+01#########"
-                                            : "${widget.initialValue != null ? "Edit" : "Add"} ${widget.label}",
+                                        : "${widget.initialValue != null ? "Edit" : "Add"} ${widget.label}",
                                     alignLabelWithHint: true,
                                     floatingLabelBehavior:
                                         FloatingLabelBehavior.never,
