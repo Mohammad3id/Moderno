@@ -60,7 +60,6 @@ class UserSettingsTopBar extends StatelessWidget {
             ),
             onPressed: () {
               BlocProvider.of<UserBloc>(context).add(UserLogedOut());
-              Navigator.of(context).pop();
             },
             child: const Text("Log Out"),
           ),

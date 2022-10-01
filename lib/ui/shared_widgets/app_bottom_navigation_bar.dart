@@ -14,11 +14,10 @@ class AppBottomNavigationBar extends StatelessWidget {
     this.elevated = true,
   }) : isInMainScreen = true;
 
-  AppBottomNavigationBar.outsideMainScreen({super.key})
+  AppBottomNavigationBar.outsideMainScreen({super.key, this.elevated = true})
       : pageIndex = 0,
         pageController = PageController(),
-        isInMainScreen = false,
-        elevated = true;
+        isInMainScreen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +56,16 @@ class AppBottomNavigationBar extends StatelessWidget {
               curve: Curves.ease,
             );
           } else {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            Navigator.pushReplacement(
-              context,
-              FadeInPageRoute(
-                MainScreen.withInitialPageIndex(index),
-              ),
-            );
+            if (ModalRoute.of(context) != null &&
+                !ModalRoute.of(context)!.isFirst) {
+              Navigator.of(context).removeRouteBelow(ModalRoute.of(context)!);
+              Navigator.pushReplacement(
+                context,
+                FadeInPageRoute(
+                  MainScreen.withInitialPageIndex(index),
+                ),
+              );
+            }
           }
         },
         showSelectedLabels: false,

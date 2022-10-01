@@ -30,9 +30,7 @@ class CartItemTile extends StatelessWidget {
                 CartItemTileNameAndStatus(cartItem: cartItem),
                 const SizedBox(height: 5),
                 CartItemTileAttributes(cartItem: cartItem),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.start,

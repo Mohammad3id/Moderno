@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moderno/data/models/product.dart';
 import 'package:moderno/shared_functionality/fade_in_page_route.dart';
 import 'package:moderno/shared_functionality/format_enum.dart';
@@ -6,7 +7,7 @@ import 'package:moderno/shared_functionality/format_price.dart';
 import 'package:moderno/ui/screens/product_screen/product_screen.dart';
 
 class ProductInfoTile extends StatefulWidget {
-  final showFavIcon;
+  final bool showFavIcon;
   final void Function(bool isWishlisted)? onFavIconPressed;
   const ProductInfoTile({
     Key? key,
@@ -28,9 +29,14 @@ class _ProductInfoTileState extends State<ProductInfoTile> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Image
         GestureDetector(
           onTap: () async {
+            SystemChrome.setSystemUIOverlayStyle(
+              const SystemUiOverlayStyle(
+                statusBarColor: Color.fromARGB(0, 0, 0, 0),
+              ),
+            );
+
             final isWishlistedInProductScreen =
                 await Navigator.of(context).push(
               FadeInPageRoute(
@@ -40,6 +46,12 @@ class _ProductInfoTileState extends State<ProductInfoTile> {
                   heroTag: widget.product,
                   isBundle: widget.product.isBundle,
                 ),
+              ),
+            );
+
+            SystemChrome.setSystemUIOverlayStyle(
+              const SystemUiOverlayStyle(
+                statusBarColor: Color.fromARGB(128, 0, 0, 0),
               ),
             );
 

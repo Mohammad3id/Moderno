@@ -67,7 +67,7 @@ class UserProvider {
     try {
       databaseUser.shippingAdresses.add(
         UserShippingAddress(
-          id: Uuid().v4(),
+          id: const Uuid().v4(),
           name: name,
           country: country,
           governate: governate,
@@ -454,9 +454,9 @@ List<DatabaseUser> usersDatabase = [
           ),
           CartItem(
             id: const Uuid().v4(),
-            product: productsDatabase[3],
+            product: productsDatabase[4],
             quantity: 5,
-            productAttributes: productsDatabase[3].defaultAttributesOptions,
+            productAttributes: productsDatabase[4].defaultAttributesOptions,
           ),
         ]),
         orderDate: DateTime.now().subtract(const Duration(days: 9)),

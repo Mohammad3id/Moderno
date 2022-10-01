@@ -4,15 +4,14 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:moderno/bloc/user_bloc.dart';
 import 'package:moderno/data/models/user.dart';
 import 'package:moderno/shared_functionality/keep_numbers_only.dart';
-import 'user_payment_method_add_dialog_formatters.dart';
 
 class UserShippingAddressEditDialog extends StatefulWidget {
-  UserShippingAddressEditDialog({
+  const UserShippingAddressEditDialog({
     super.key,
     required this.userBloc,
     required this.isNewShippingAddress,
     this.initialShippingAddressValues,
-  }) {}
+  });
 
   final UserBloc userBloc;
   final bool isNewShippingAddress;
@@ -249,8 +248,8 @@ class _UserShippingAddressEditDialogState
                                       ]
                                           .map(
                                             (gov) => DropdownMenuItem(
-                                              child: Text(gov),
                                               value: gov,
+                                              child: Text(gov),
                                             ),
                                           )
                                           .toList(),

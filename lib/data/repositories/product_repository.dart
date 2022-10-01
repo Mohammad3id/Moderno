@@ -55,29 +55,29 @@ class ProductRepository {
       startAfterProductId: startSearchingFromProductId,
       sort: sort,
       condition: (product) {
-        for (final word in search.split(" ")) {
+        for (final word in search.toLowerCase().split(" ")) {
           if (condition!(product) &&
-                  product.description.contains(
-                    RegExp(word),
+              (product.description.toLowerCase().contains(
+                        RegExp(word),
+                      ) ||
+                  product.name.toLowerCase().contains(
+                        RegExp(word),
+                      ) ||
+                  product.attributesOptions.keys.any(
+                    (key) => key.toLowerCase().contains(
+                          RegExp(word),
+                        ),
                   ) ||
-              product.name.contains(
-                RegExp(word),
-              ) ||
-              product.attributesOptions.keys.any(
-                (key) => key.contains(
-                  RegExp(word),
-                ),
-              ) ||
-              product.attributesOptions.values.any(
-                (values) => values.any(
-                  (value) => value.contains(
-                    RegExp(word),
-                  ),
-                ),
-              ) ||
-              product.category.name.contains(
-                RegExp(word),
-              )) {
+                  product.attributesOptions.values.any(
+                    (values) => values.any(
+                      (value) => value.toLowerCase().contains(
+                            RegExp(word),
+                          ),
+                    ),
+                  ) ||
+                  product.category.name.toLowerCase().contains(
+                        RegExp(word),
+                      ))) {
             return true;
           }
         }

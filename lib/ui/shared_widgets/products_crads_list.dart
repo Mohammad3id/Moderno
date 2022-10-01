@@ -154,7 +154,6 @@ class _ProductCardState extends State<ProductCard> {
             ),
             Positioned.fill(
               child: AnimatedOpacity(
-                curve: Curves.ease,
                 duration: const Duration(milliseconds: 200),
                 opacity: _opened ? 0 : 1,
                 child: Container(

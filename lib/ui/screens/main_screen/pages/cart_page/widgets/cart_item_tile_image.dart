@@ -29,6 +29,7 @@ class CartItemTileImage extends StatelessWidget {
               mainImageUrl: cartItem.product.imagesUrls.first,
               heroTag: cartItem.id,
               isBundle: cartItem.product is Bundle,
+              startingAttributes: cartItem.productAttributes,
             ),
           ),
         )

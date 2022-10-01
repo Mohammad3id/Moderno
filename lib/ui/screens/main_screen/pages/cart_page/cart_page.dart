@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:moderno/bloc/cart_bloc.dart';
 import 'package:moderno/shared_functionality/curves_with_delay.dart';
-import 'package:moderno/shared_functionality/format_price.dart';
 import 'package:moderno/ui/screens/main_screen/pages/cart_page/widgets/cart_item_tile.dart';
 
 import 'widgets/cart_summary.dart';
@@ -77,7 +76,7 @@ class _CartPageState extends State<CartPage> {
                       : const Duration(milliseconds: 500),
                   child: const Center(
                     child: Text(
-                      "Cart is Empty",
+                      "Empty Cart",
                       style: TextStyle(
                         fontSize: 30,
                         color: Color.fromARGB(100, 0, 0, 0),
@@ -124,11 +123,26 @@ class _CartPageState extends State<CartPage> {
               ],
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).primaryColor,
-              ),
-            );
+            return KeyboardVisibilityBuilder(
+                builder: (context, isKeyboardVisible) {
+              return AnimatedOpacity(
+                opacity: isKeyboardVisible ? 0 : 1,
+                curve: isKeyboardVisible
+                    ? Curves.ease
+                    : const CurveWithDelay(
+                        delayRatio: 0.6,
+                        curve: Curves.ease,
+                      ),
+                duration: isKeyboardVisible
+                    ? const Duration(milliseconds: 200)
+                    : const Duration(milliseconds: 500),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              );
+            });
           }
         },
       ),

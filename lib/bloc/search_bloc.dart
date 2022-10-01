@@ -22,6 +22,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   FutureOr<void> _onSearchInitialized(
       SearchInitialized event, Emitter<SearchState> emit) async {
     emit(SearchLoadInProgress());
+    await Future.delayed(const Duration(seconds: 1));
     try {
       final searchResults =
           await _productRepository.searchProducts(event.searchText);

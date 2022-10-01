@@ -19,6 +19,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
   bool _scrolled = false;
   final _scrollController = ScrollController();
 
+  bool _popPage = false;
+
   @override
   void initState() {
     _scrollController.addListener(() {
@@ -35,7 +37,22 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
       value: widget.userBloc,
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+        body: BlocConsumer<UserBloc, UserState>(listener: (context, state) {
+          if (state is UserGuest) {
+            Future.delayed(const Duration(milliseconds: 200)).then((_) {
+              _popPage = true;
+              Navigator.of(context).pop();
+            });
+          }
+        }, builder: (context, state) {
+          if (state is UserGuest || state is UserLogOutInProgress) {
+            return WillPopScope(
+              onWillPop: () async => _popPage,
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            );
+          }
           state as UserLoginSuccess;
           return DefaultTextStyle(
             style: const TextStyle(color: Colors.white),

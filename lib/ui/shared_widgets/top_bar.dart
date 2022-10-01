@@ -41,15 +41,18 @@ class _TopBarState extends State<TopBar> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              iconSize: 30,
-              icon: Icon(
-                Icons.menu,
-                color: Theme.of(context).primaryColor,
+            Material(
+              child: IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                iconSize: 30,
+                icon: Icon(
+                  Icons.menu,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
             Expanded(
@@ -84,11 +87,15 @@ class _TopBarState extends State<TopBar> {
                                 ),
                               );
                             } else {
-                              Navigator.of(context).push(
+                              Navigator.of(context)
+                                  .push(
                                 FadeInPageRoute(
                                   SearchScreen(searchText: searchText.trim()),
                                 ),
-                              );
+                              )
+                                  .then((value) {
+                                _searchBarController.clear();
+                              });
                             }
                           },
                           decoration: const InputDecoration(

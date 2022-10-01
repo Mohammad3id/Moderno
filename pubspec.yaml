@@ -41,6 +41,25 @@ dependencies:
   uuid: ^3.0.6
   flutter_keyboard_visibility: ^5.3.0
   intl: ^0.17.0
+  url_launcher: ^6.1.6
+  flutter_native_splash: ^2.2.10+1
+  flutter_launcher_icons: "^0.10.0"
+
+flutter_native_splash:
+  color: "#7D98A1"
+  image: images/splash.png
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.png"
+  # web:
+  #   generate: true
+  #   image_path: "images/icon.png"
+  # windows:
+  #   generate: true
+  #   image_path: "images/icon.png"
+  #   icon_size: 48
 
 dev_dependencies:
   flutter_test:

@@ -13,7 +13,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   final String _productId;
   final bool isBundle;
-  ProductBloc(this._productId, {this.isBundle = false})
+  final Map<String, String>? startingAttributes;
+  ProductBloc(this._productId, {this.isBundle = false, this.startingAttributes})
       : super(ProductInitial()) {
     on<ProductInitialized>(_onProductInitialized);
     on<ProductAttributeOptionSelected>(_onProductAttributeOptionSelected);
@@ -42,7 +43,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                 await _wishlistRepository.isProductWishlisted(_productId),
             expectedDeliveryTime: bundle.expectedDeliveryTime,
             attributesOptions: bundle.attributesOptions,
-            selectedAttributesOptions: bundle.defaultAttributesOptions,
+            selectedAttributesOptions:
+                startingAttributes ?? bundle.defaultAttributesOptions,
             description: bundle.description,
             name: bundle.name,
             descriptionParagraphs: bundle.descriptionParagraphs,
@@ -75,7 +77,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                 await _wishlistRepository.isProductWishlisted(_productId),
             expectedDeliveryTime: product.expectedDeliveryTime,
             attributesOptions: product.attributesOptions,
-            selectedAttributesOptions: product.defaultAttributesOptions,
+            selectedAttributesOptions:
+                startingAttributes ?? product.defaultAttributesOptions,
             description: product.description,
             dimensions: product.dimensions,
             name: product.name,

@@ -28,7 +28,7 @@ class CartProvider {
         : await _productProvider.getProductById(productId);
     databaseUser.cart.items.add(
       CartItem(
-        id: Uuid().v4(),
+        id: const Uuid().v4(),
         product: product,
         quantity: quantity,
         productAttributes: productAttributes,

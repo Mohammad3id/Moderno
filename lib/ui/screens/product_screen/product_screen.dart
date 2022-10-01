@@ -9,13 +9,14 @@ class ProductScreen extends StatefulWidget {
   final String productId;
   final String mainImageUrl;
   final Object heroTag;
-
   final bool isBundle;
+  final Map<String, String>? startingAttributes;
   const ProductScreen({
     required this.productId,
     required this.mainImageUrl,
     required this.heroTag,
     this.isBundle = false,
+    this.startingAttributes,
     super.key,
   });
 
@@ -49,8 +50,9 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProductBloc>(
-      create: (context) =>
-          ProductBloc(widget.productId, isBundle: widget.isBundle),
+      create: (context) => ProductBloc(widget.productId,
+          isBundle: widget.isBundle,
+          startingAttributes: widget.startingAttributes),
       child: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
           ScaffoldMessenger.of(context).clearSnackBars();

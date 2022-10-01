@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moderno/data/models/product.dart';
 import 'package:moderno/shared_functionality/format_price.dart';
 import 'package:moderno/ui/screens/product_screen/product_screen.dart';
@@ -89,7 +90,13 @@ class BundleOfTheWeekSection extends StatelessWidget {
                           if (showBundlePage != null && showBundlePage) {
                             Future.delayed(const Duration(milliseconds: 200))
                                 .then((value) {
-                              Navigator.of(context).push(
+                              SystemChrome.setSystemUIOverlayStyle(
+                                const SystemUiOverlayStyle(
+                                  statusBarColor: Color.fromARGB(0, 0, 0, 0),
+                                ),
+                              );
+                              Navigator.of(context)
+                                  .push(
                                 MaterialPageRoute(
                                   builder: (context) => ProductScreen(
                                     productId: bundle.id,
@@ -98,7 +105,15 @@ class BundleOfTheWeekSection extends StatelessWidget {
                                     isBundle: true,
                                   ),
                                 ),
-                              );
+                              )
+                                  .then((value) {
+                                SystemChrome.setSystemUIOverlayStyle(
+                                  const SystemUiOverlayStyle(
+                                    statusBarColor:
+                                        Color.fromARGB(128, 0, 0, 0),
+                                  ),
+                                );
+                              });
                             });
                           }
                         });
@@ -113,16 +128,28 @@ class BundleOfTheWeekSection extends StatelessWidget {
             width: 20,
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProductScreen(
-                  productId: bundle.id,
-                  mainImageUrl: bundle.imagesUrls.first,
-                  heroTag: bundle,
-                  isBundle: true,
+            onTap: () async {
+              SystemChrome.setSystemUIOverlayStyle(
+                const SystemUiOverlayStyle(
+                  statusBarColor: Color.fromARGB(0, 0, 0, 0),
                 ),
-              ),
-            ),
+              );
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductScreen(
+                    productId: bundle.id,
+                    mainImageUrl: bundle.imagesUrls.first,
+                    heroTag: bundle,
+                    isBundle: true,
+                  ),
+                ),
+              );
+              SystemChrome.setSystemUIOverlayStyle(
+                const SystemUiOverlayStyle(
+                  statusBarColor: Color.fromARGB(128, 0, 0, 0),
+                ),
+              );
+            },
             child: Hero(
               tag: bundle,
               child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moderno/data/models/cart.dart';
 import 'package:moderno/shared_functionality/calculate_color_value.dart';
+import 'package:moderno/shared_functionality/calculate_contrast.dart';
 
 class CartItemTileAttributes extends StatelessWidget {
   const CartItemTileAttributes({
@@ -34,6 +35,12 @@ class CartItemTileAttributes extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Color(calculateColorValue(attributeValue)),
                     borderRadius: BorderRadius.circular(20),
+                    border: calculateContrast(attributeValue, "#FFFFFF") < 50
+                        ? Border.all(
+                            color: Theme.of(context).primaryColor,
+                            strokeAlign: StrokeAlign.inside,
+                          )
+                        : null,
                   ),
                 );
               } else {

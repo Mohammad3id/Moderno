@@ -75,6 +75,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     Emitter<UserState> emit,
   ) async {
     emit(UserLoginInProgress());
+    await Future.delayed(const Duration(seconds: 1));
     try {
       await _userRepository.logIn(event.email, event.password);
       if (_wishlistRepository.currentWishlist.isNotEmpty) {
@@ -114,6 +115,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserLogedOut event,
     Emitter<UserState> emit,
   ) async {
+    emit(UserLogOutInProgress());
     await _userRepository.logOut();
     await _cartRepository.clearCart();
     await _wishlistRepository.clearWishlist();
@@ -496,6 +498,8 @@ class UserLoginSuccess extends UserState {
     required this.wishlist,
   });
 }
+
+class UserLogOutInProgress extends UserState {}
 
 class UserUpdateSuccess extends UserLoginSuccess {
   UserUpdateSuccess({required super.userInfo, required super.wishlist});
