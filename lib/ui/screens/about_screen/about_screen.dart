@@ -33,10 +33,7 @@ class AboutScreen extends StatelessWidget {
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 0,
-                        ),
+                        padding: const EdgeInsets.only(left: 10),
                         iconSize: 30,
                         icon: const Icon(
                           Icons.menu,
@@ -138,14 +135,14 @@ class AboutScreen extends StatelessWidget {
                     Row(
                       children: [
                         const Text(
-                          "eid115599@gmail.com",
+                          "eid4dev@gmail.com",
                           style: TextStyle(fontSize: 20),
                         ),
                         IconButton(
                           onPressed: () async {
                             launchUrl(
                               Uri.parse(
-                                "mailto:eid115599@gmail.com",
+                                "mailto:eid4dev@gmail.com",
                               ),
                               mode: LaunchMode.externalApplication,
                             );

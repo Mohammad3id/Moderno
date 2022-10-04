@@ -293,7 +293,7 @@ List<DatabaseUser> usersDatabase = [
     id: const Uuid().v4(),
     firstName: "Mohammad",
     lastName: "Eid",
-    email: "eid115599@gmail.com",
+    email: "eid4dev@gmail.com",
     shippingAdresses: [
       UserShippingAddress(
         id: const Uuid().v4(),

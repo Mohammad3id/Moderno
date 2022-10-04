@@ -16,7 +16,7 @@ List<News> _loadNewsDatabase() {
   List<News> newsDatabase = [
     News(
       imageUrl: "images/news/news1.jpg",
-      title: "New Couche Models",
+      title: "New Couch Models",
     ),
     News(
       imageUrl: "images/news/news2.jpg",
