@@ -6,8 +6,8 @@ An ecommerce project with beautiful UI. This app is a personal project meant as 
 
 ### Shocase
 
-<img src="./showcase/home.gif" />
+<img src="./showcase/home.gif" width="300" />
 
-<img src="./showcase/login.gif" />
+<img src="./showcase/login.gif" width="300" />
 
-<img src="./showcase/order.gif" />
+<img src="./showcase/order.gif" width="300" />
